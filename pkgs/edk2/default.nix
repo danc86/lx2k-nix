@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchFromGitHub, libuuid, python3, bc }:
+{ stdenv, lib, buildPackages, fetchFromGitHub, libuuid, python38, bc }:
 let
   edk2 = stdenv.mkDerivation {
     pname = "edk2-solidrun";
@@ -12,7 +12,7 @@ let
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ libuuid python3 ];
+    nativeBuildInputs = [ libuuid python38 ];
 
     postPatch = "patchShebangs BaseTools/BinWrappers";
 
@@ -35,7 +35,7 @@ let
       mkDerivation = projectDscPath: attrs: stdenv.mkDerivation ({
         inherit (edk2) src;
 
-        nativeBuildInputs = [ bc python3 ] ++ attrs.nativeBuildInputs or [ ];
+        nativeBuildInputs = [ bc python38 ] ++ attrs.nativeBuildInputs or [ ];
 
         prePatch = ''
           rm -rf BaseTools
