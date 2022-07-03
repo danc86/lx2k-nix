@@ -37,6 +37,8 @@ let
 
         nativeBuildInputs = [ bc python38 ] ++ attrs.nativeBuildInputs or [ ];
 
+        dontFixup = true;
+
         prePatch = ''
           rm -rf BaseTools
           ln -sv ${edk2}/BaseTools BaseTools
