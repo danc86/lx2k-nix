@@ -1,9 +1,10 @@
 { stdenv
 , lib
 , buildPackages
-, fetchFromGitHub
+, fetchgit
 , tianocore
 , rcw
+, bc
 , openssl
 , bootMode ? "sd"
 , bl33 ? "${tianocore}/FV/LX2160ACEX7_EFI.fd"
@@ -11,24 +12,33 @@
 
 assert lib.elem bootMode [ "sd" "spi" ];
 let
-  atfBoot = if bootMode == "sd" then "sd" else "flexspi_nor";
+  atfBoot = "auto";
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
 stdenv.mkDerivation rec {
   pname = "atf";
-  version = "unstable-2020-08-31";
+  version = "LSDK-21.08";
 
-  src = fetchFromGitHub {
-    owner = "SolidRun";
-    repo = "arm-trusted-firmware";
-    rev = "ed25defc9847c1159574e5efa84b4ddf208e3f74";
-    sha256 = "0j4gw05ppqkz2l98d6fqpq2agjgl93q7b6m6zs1nwn0gb6s33rwc";
+  src = fetchgit {
+    url = "https://source.codeaurora.org/external/qoriq/qoriq-components/atf";
+    rev = "refs/tags/LSDK-21.08";
+    sha256 = "02fg6bd88p5kv0mkz87shhrc518jigsipdfq97zrndzswaax9jmr";
   };
+
+  patches = [
+    ./patches/0001-plat-nxp-Add-lx2160acex7-module-support.patch
+    ./patches/0002-plat-nxp-Add-lx2162-som-support.patch
+    ./patches/0003-lx2160acex7-assert-SUS_S5-GPIO-to-poweroff-the-COM.patch
+    ./patches/0004-plat-nxp-lx2160a-auto-boot.patch
+    ./patches/0005-lx2160a-flush-i2c-bus-before-initialising-ddr.patch
+    ./patches/0006-lx2160a-flush-i2c-bus-connected-mux-channels.patch
+    ./patches/0007-lx2160a-flush-i2c-buses-unconditionally.patch
+  ];
 
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ openssl ];
+  nativeBuildInputs = [ bc openssl ];
 
   makeFlags = [
     "PLAT=lx2160acex7"
