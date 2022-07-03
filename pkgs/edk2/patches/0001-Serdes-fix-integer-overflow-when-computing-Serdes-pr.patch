@@ -1,0 +1,38 @@
+From 867f6170c244e5304c82c3fdc0ad38986c000d36 Mon Sep 17 00:00:00 2001
+From: Dan Callaghan <djc@djc.id.au>
+Date: Sun, 3 Jul 2022 22:44:49 +1000
+Subject: [PATCH] Serdes: fix integer overflow when computing Serdes protocol
+ map
+
+SerDesPrtclMap is a UINT64 but the BIT() macro produces a UINT32, which
+was causing SerDesPrtclMap to be filled with incorrect values when using
+Serdes protocols numbered greater than 32.
+
+Signed-off-by: Dan Callaghan <djc@djc.id.au>
+---
+ Silicon/NXP/Chassis/SerDes.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Silicon/NXP/Chassis/SerDes.c b/Silicon/NXP/Chassis/SerDes.c
+index 42c2c6cca1..b01352888e 100755
+--- a/Silicon/NXP/Chassis/SerDes.c
++++ b/Silicon/NXP/Chassis/SerDes.c
+@@ -147,7 +147,7 @@ LSSerDesMap (
+       DEBUG ((DEBUG_ERROR, "Unknown SerDes lane protocol %d\n", LanePrtcl));
+       Flag++;
+     } else {
+-      *SerDesPrtclMap |= BIT (LanePrtcl);
++      *SerDesPrtclMap |= ((UINT64) BIT0 << LanePrtcl);
+     }
+   }
+ 
+@@ -281,5 +281,5 @@ IsSerDesLaneProtocolConfigured (
+     DEBUG ((DEBUG_ERROR, "Unknown SerDes lane protocol Device %d\n", Device));
+   }
+ 
+-  return (SerDesPrtclMap & BIT (Device)) != 0 ;
++  return (SerDesPrtclMap & ((UINT64) BIT0 << Device)) != 0 ;
+ }
+-- 
+2.33.1
+

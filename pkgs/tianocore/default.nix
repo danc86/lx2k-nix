@@ -1,10 +1,22 @@
-{ fetchFromGitHub, edk2, utillinux, nasm, acpica-tools, dtc }:
+{ stdenv, fetchFromGitHub, edk2, utillinux, nasm, acpica-tools, dtc }:
 let
-  edk2-platforms = fetchFromGitHub {
-    owner = "SolidRun";
-    repo = "edk2-platforms";
-    rev = "de2ef829e9f69eef255617cb536d13fa03c20dcc";
-    sha256 = "00wy4494xbpqllpzjidll5cm6w5pfn9wia7m76ybyg05wmi180az";
+  edk2-platforms = stdenv.mkDerivation {
+    name = "edk2-platforms";
+    src = fetchFromGitHub {
+      owner = "SolidRun";
+      repo = "edk2-platforms";
+      rev = "de2ef829e9f69eef255617cb536d13fa03c20dcc";
+      sha256 = "00wy4494xbpqllpzjidll5cm6w5pfn9wia7m76ybyg05wmi180az";
+    };
+    patches = [
+      ../edk2/patches/0001-Serdes-fix-integer-overflow-when-computing-Serdes-pr.patch
+    ];
+    buildPhase = "true";
+    installPhase = ''
+      mkdir -p $out
+      cp -r * $out/
+    '';
+    dontFixup = true;
   };
   edk2-non-osi = fetchFromGitHub {
     owner = "SolidRun";
