@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PLAT=lx2160acex7"
     "BL33=${bl33}"
-    "RCW=${rcw}/lx2160acex7/rcws/rcw_lx2160acex7.bin"
+    "RCW=${rcw}/lx2160acex7/RCW/template.bin"
     "TRUSTED_BOARD_BOOT=0"
     "GENERATE_COT=0"
     "BOOT_MODE=${atfBoot}"
