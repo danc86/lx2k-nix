@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     "GENERATE_COT=0"
     "BOOT_MODE=${atfBoot}"
     "SECURE_BOOT=false"
+    "LDFLAGS=--no-warn-rwx-segment"
   ] ++ lib.optional isCross "CROSS_COMPILE=${stdenv.cc.targetPrefix}" ++ [
     "all"
     "fip"
