@@ -12,7 +12,7 @@ let
       ../edk2/patches/0001-Serdes-fix-integer-overflow-when-computing-Serdes-pr.patch
     ];
     postPatch = ''
-      sed -i -e 's@SECTION RAW = Silicon/NXP/QoriqMcBinary/.*\.itb@SECTION RAW = ${qoriq-mc-bin}/lx216xa/mc_lx2160a_10.28.1.itb@' Platform/SolidRun/LX2160aCex7/LX2160aCex7.fdf
+      sed -i -e 's@SECTION RAW = Silicon/NXP/QoriqMcBinary/.*\.itb@SECTION RAW = ${qoriq-mc-bin}/lx2160a/mc_lx2160a_10.30.0.itb@' Platform/SolidRun/LX2160aCex7/LX2160aCex7.fdf
     '';
     buildPhase = "true";
     installPhase = ''

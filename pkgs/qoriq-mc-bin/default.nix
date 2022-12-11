@@ -3,6 +3,6 @@
 fetchFromGitHub {
   owner = "NXP";
   repo = "qoriq-mc-binary";
-  rev = "LSDK-21.08";
-  sha256 = "sha256-o04FF1q8ySDBYFizSRl3ugpbJZvpfIoEGRVFyBlFB5A=";
+  rev = "mc_release_10.30.0";
+  sha256 = "sha256-3dB5+ugcTKzrUACUlRhcrka9/sSBjY2mT9qp2aSkbAs=";
 }
